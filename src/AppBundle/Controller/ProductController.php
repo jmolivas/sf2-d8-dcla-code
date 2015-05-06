@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -17,6 +18,32 @@ use AppBundle\Form\ProductType;
  */
 class ProductController extends Controller
 {
+
+    /**
+     * Finds and displays a Product entity serialized as json.
+     *
+     * @Route("/{id}.json", name="product_show_json")
+     * @Method("GET")
+     */
+    public function showJsonAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Product $product */
+        $product = $em->getRepository('AppBundle:Product')->find($id);
+
+        if (!$product) {
+            throw $this->createNotFoundException('Unable to find Product entity.');
+        }
+
+        $data = [
+          'id' => $product->getId(),
+          'name' => $product->getName(),
+          'price' => $product->getPrice(),
+        ];
+
+        return new JsonResponse($data);
+    }
 
     /**
      * Lists all Product entities.
