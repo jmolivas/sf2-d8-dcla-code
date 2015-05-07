@@ -10,3 +10,4 @@ services:
 
   appbundle.product_serializer:
     class: AppBundle\ProductSerializer
+    arguments: ["@router"]
