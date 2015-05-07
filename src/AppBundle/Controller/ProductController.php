@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use AppBundle\Entity\Product;
 use AppBundle\Form\ProductType;
-use AppBundle\ProductSerializer;
 
 /**
  * Product controller.
@@ -37,7 +36,9 @@ class ProductController extends Controller
             throw $this->createNotFoundException('Unable to find Product entity.');
         }
 
-        $productSerializer = new ProductSerializer();
+        $productSerializer = $this->container
+          ->get('appbundle.product_serializer');
+
         $data = $productSerializer->serialize($product);
 
         return new JsonResponse($data);
